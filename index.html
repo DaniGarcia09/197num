@@ -1,14 +1,184 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Codificador de Mensajes</title>
 </head>
 
 <body>
+    <h1>Encriptador y Desencriptador</h1>
+    <h3>Dani y Oscar</h3>
+    <p>Introduce el mensaje que deseas codificar:</p>
+    <input type="text" id="inputMensaje" placeholder="Escribe tu mensaje aquí">
+    <p>Resultado:</p>
+    <div id="resultado"></div>
+    <p>Resultado Encriptado (X''): </p>
+    <div id="resultadoEncriptado"></div>
+    <input type="hidden" id="inputEncriptadoX2" placeholder="Escribe el mensaje encriptado (X'' a X') aquí">
+    <div id="resultadoDescifradoX"></div>
+    <p>Descifrar Mensaje Original (X' a Original): </p>
+    <div id="resultadoDescifradoOriginal"></div>
+    <p>Convertir X' a Original:</p>
+    <input type="text" id="inputXaOriginal" placeholder="Escribe el mensaje X' aquí">
+    <p>Resultado X' a Original:</p>
+    <div id="resultadoXaOriginal"></div>
+    <p>Introduce el mensaje encriptado en X'':</p>
+    <input type="text" id="inputX2" placeholder="Escribe el mensaje encriptado X'' aquí">
+    <p>Resultado (X'' a X'):</p>
+    <div id="resultadoX"></div>
 
+    <script>
+        const inputMensaje = document.getElementById('inputMensaje');
+        const resultadoDiv = document.getElementById('resultado');
+        const resultadoEncriptadoDiv = document.getElementById('resultadoEncriptado');
+        const inputEncriptadoX2 = document.getElementById('inputEncriptadoX2');
+        const resultadoDescifradoXDiv = document.getElementById('resultadoDescifradoX');
+        const resultadoDescifradoOriginalDiv = document.getElementById('resultadoDescifradoOriginal');
+        const inputXaOriginal = document.getElementById('inputXaOriginal');
+        const resultadoXaOriginalDiv = document.getElementById('resultadoXaOriginal');
+        const inputX2 = document.getElementById('inputX2');
+        const resultadoXDiv = document.getElementById('resultadoX');
+
+        const vocales = 'aeiouAEIOU';
+
+        inputMensaje.addEventListener('input', function() {
+            const mensaje = inputMensaje.value;
+            const mensajeCodificado = codificarMensaje(mensaje);
+            resultadoDiv.textContent = mensajeCodificado;
+
+            // Encriptar el resultado de "resultadoDiv" y mostrarlo en "resultadoEncriptadoDiv"
+            const resultadoEncriptado = encriptarResultado(resultadoDiv.textContent);
+            resultadoEncriptadoDiv.textContent = resultadoEncriptado;
+        });
+
+        inputEncriptadoX2.addEventListener('input', function() {
+            const mensajeEncriptadoX2 = inputEncriptadoX2.value;
+
+            // Descifrar el mensaje encriptado X'' a X'
+            const mensajeDescifradoX = descifrarMensajeX2(mensajeEncriptadoX2);
+            resultadoDescifradoXDiv.textContent = mensajeDescifradoX;
+        });
+
+        inputXaOriginal.addEventListener('input', function() {
+            const mensajeXaOriginal = inputXaOriginal.value;
+
+            // Descifrar el mensaje X' a Original
+            const mensajeOriginal = descifrarMensajeOriginal(mensajeXaOriginal);
+            resultadoXaOriginalDiv.textContent = mensajeOriginal;
+        });
+
+        function codificarMensaje(mensaje) {
+            let mensajeCodificado = '';
+            let secuenciaNoVocales = '';
+
+            for (let i = 0; i < mensaje.length; i++) {
+                const caracter = mensaje[i];
+
+                if (vocales.includes(caracter)) {
+                    mensajeCodificado += secuenciaNoVocales.split('').reverse().join('');
+                    secuenciaNoVocales = '';
+                    mensajeCodificado += caracter;
+                } else {
+                    secuenciaNoVocales += caracter;
+                }
+            }
+
+            mensajeCodificado += secuenciaNoVocales.split('').reverse().join('');
+
+            return mensajeCodificado;
+        }
+
+        function encriptarResultado(resultado) {
+            // Implementar la encriptación del resultado
+            // Colocar el primer carácter, luego el último, luego el segundo, etc.
+            let resultadoEncriptado = '';
+            let i = 0;
+            let j = resultado.length - 1;
+
+            while (i <= j) {
+                if (i === j) {
+                    resultadoEncriptado += resultado[i];
+                } else {
+                    resultadoEncriptado += resultado[i] + resultado[j];
+                }
+                i++;
+                j--;
+            }
+
+            return resultadoEncriptado;
+        }
+
+        function descifrarMensajeX2(mensajeEncriptadoX2) {
+            // Implementar la función para descifrar el mensaje encriptado X'' a X'
+            // Colocar el primer carácter, luego el último, luego el segundo, etc.
+            let mensajeDescifradoX = '';
+            let i = 0;
+            let j = mensajeEncriptadoX2.length - 1;
+
+            while (i <= j) {
+                if (i === j) {
+                    mensajeDescifradoX += mensajeEncriptadoX2[i];
+                } else {
+                    mensajeDescifradoX += mensajeEncriptadoX2[i] + mensajeEncriptadoX2[j];
+                }
+                i++;
+                j--;
+            }
+
+            return mensajeDescifradoX;
+        }
+
+        function descifrarMensajeOriginal(mensajeEncriptadoX) {
+            // Implementar la función para descifrar el mensaje original (X' a Original)
+            // Debes revertir la transformación X' aplicada anteriormente
+            // Reemplazar cada sucesión de caracteres consecutivos que no sean vocales por su imagen especular
+            let mensajeOriginal = '';
+            let secuenciaNoVocales = '';
+            let i = 0;
+
+            while (i < mensajeEncriptadoX.length) {
+                const caracter = mensajeEncriptadoX[i];
+
+                if (vocales.includes(caracter)) {
+                    mensajeOriginal += secuenciaNoVocales.split('').reverse().join('');
+                    secuenciaNoVocales = '';
+                    mensajeOriginal += caracter;
+                } else {
+                    secuenciaNoVocales += caracter;
+                }
+                i++;
+            }
+
+            mensajeOriginal += secuenciaNoVocales.split('').reverse().join('');
+
+            return mensajeOriginal;
+        }
+        inputX2.addEventListener('input', function() {
+            const mensajeX2 = inputX2.value;
+
+            // Realizar la decodificación X'' a X' (invierte el proceso)
+            const mensajeX = decodificarMensajeX2(mensajeX2);
+            resultadoXDiv.textContent = mensajeX;
+        });
+
+        function decodificarMensajeX2(mensajeX2) {
+            let mensajeX = '';
+            let i = 0;
+            let j = mensajeX2.length - 1;
+
+            while (i <= j) {
+                if (i === j) {
+                    mensajeX += mensajeX2[i];
+                } else {
+                    mensajeX += mensajeX2[j] + mensajeX2[i];
+                }
+                i++;
+                j--;
+            }
+
+            return mensajeX;
+        }
+    </script>
 </body>
 
 </html>
